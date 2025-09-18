@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Registration Type - Sports Day 2025</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .flag-wave {
+      background: linear-gradient(to right, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%);
+      height: 20px;
+    }
+    .tricolor-underline {
+      height: 4px;
+      width: 100px;
+      background: linear-gradient(to right, #FF9933, #FFFFFF, #138808);
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#FF9933] via-white to-[#138808] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-[#0f3f8f] py-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="{{ url_for('static', filename='images/NIELIT_Logo copy.png') }}
+" alt="NIELIT Logo" class="h-10 bg-white rounded p-1 shadow">
+        <h1 class="text-xl sm:text-2xl font-bold text-white">NIELIT Sports Day 2025</h1>
+      </div>
+      <nav class="space-x-4 text-white font-medium text-sm sm:text-base">
+        <a href="/" class="hover:underline">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flag Strip -->
+  <div class="flag-wave"></div>
+
+  <!-- Main Card -->
+  <main class="flex-grow flex items-center justify-center px-4 py-12">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8 border border-gray-300 text-center">
+      
+      <!-- Logo & Title -->
+      <div class="flex flex-col items-center mb-6">
+        <img src="{{ url_for('static', filename='images/NIELIT_Logo copy.png') }}
+" alt="NIELIT Logo" class="h-14 bg-white rounded p-1 shadow-sm">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0f3f8f] mt-3">Choose Registration Type</h2>
+        <div class="tricolor-underline mt-2 mb-4"></div>
+        <p class="text-gray-700 text-sm sm:text-base italic">“Unity in action brings victory in sports!”</p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-col gap-4 mt-6">
+        <a href="{{ url_for('register_individual') }}"
+           class="w-full bg-blue-600 hover:bg-blue-800 text-white py-3 rounded-md text-base font-semibold shadow-md transition duration-200">
+          Register as Individual
+        </a>
+        <a href="{{ url_for('register_team') }}"
+           class="w-full bg-green-600 hover:bg-green-800 text-white py-3 rounded-md text-base font-semibold shadow-md transition duration-200">
+          Register as Team
+        </a>
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+  <footer class="bg-[#138808] text-white py-4 text-center text-sm font-medium">
+    © 2025 NIELIT Sports Day Committee. 
+  </footer>
+</body>
+</html>

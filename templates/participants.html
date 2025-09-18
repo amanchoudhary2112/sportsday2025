@@ -1,109 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Participants List</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Participants & Teams</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-6 font-sans text-gray-800">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <div class="max-w-7xl mx-auto space-y-6">
-    
-    <!-- Header -->
-    <header class="flex flex-col sm:flex-row justify-between items-center gap-4">
-      <h1 class="text-3xl font-bold text-indigo-700">🏅 Registered Participants</h1>
-      <div class="flex flex-wrap gap-3">
-        <a href="{{ url_for('download_excel') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
-          📥 Download Excel
-        </a>
-        <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition">
-          🚪 Logout
-        </a>
-      </div>
-    </header>
+  <div class="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 mb-10">
+    <h1 class="text-3xl font-bold text-center text-blue-800 mb-8">Sports Day Registrations</h1>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="px-4 py-3 rounded bg-blue-100 text-blue-800 border border-blue-300">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <!-- Search Form -->
-    <form method="get" action="{{ url_for('participants') }}" class="flex gap-2 items-center flex-wrap">
-      <input type="text" name="search" value="{{ search_query or '' }}" placeholder="Search by name, email or sport..."
-             class="p-2 border border-gray-300 rounded w-full sm:w-80">
-      <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
-        🔍 Search
+    <!-- Search -->
+    <form method="get" action="{{ url_for('participants') }}" class="flex justify-center mb-8" role="search">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search participants or teams..."
+        value="{{ search_query }}"
+        aria-label="Search participants and teams"
+        class="w-72 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        class="px-5 py-2 bg-blue-600 text-white font-semibold rounded-r-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
+      >
+        Search
       </button>
     </form>
 
     <!-- Action Buttons -->
-    <div class="flex flex-wrap gap-3">
-      <form method="post" action="{{ url_for('delete_all') }}" onsubmit="return confirm('Delete ALL participants?');">
-        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-          🗑️ Delete All
+    <div class="flex flex-wrap justify-center gap-4 mb-8">
+      <form method="post" action="{{ url_for('delete_all') }}" onsubmit="return confirm('Are you sure you want to delete all participants?');" class="inline">
+        <button
+          type="submit"
+          class="px-5 py-2 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow shadow-sm hover:shadow-lg"
+          aria-label="Delete all participants"
+        >
+          Delete All
         </button>
       </form>
-      <a href="{{ url_for('undo_delete') }}" class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded">
-        ↩️ Undo Delete
+
+      <a
+        href="{{ url_for('undo_delete') }}"
+        class="px-5 py-2 bg-yellow-400 text-gray-900 rounded-md font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-sm hover:shadow-lg"
+        aria-label="Undo last delete action"
+      >
+        Undo Delete
       </a>
+      <!-- Combined Download Button -->
+      <div class="relative inline-block text-left">
+        <button
+          id="download-all-toggle"
+          class="px-5 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-shadow shadow-sm hover:shadow-lg"
+          aria-label="Download all data"
+        >
+          Download All
+        </button>
+        <div id="download-all-menu" class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-20">
+          <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="download-all-toggle">
+            <a href="{{ url_for('download_all') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+              Download All Participants
+            </a>
+            <a href="{{ url_for('download_all_teams') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+              Download All Teams
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Participants Table -->
-    <section class="overflow-x-auto bg-white shadow-md rounded-lg">
-      <table class="min-w-full table-auto text-sm">
-        <thead class="bg-gray-100 text-left text-gray-700 uppercase tracking-wider">
+    <!-- Consolidated Download by sport section -->
+    <div class="flex flex-wrap justify-center items-center gap-3 mb-10">
+      <select
+        id="sport-select"
+        aria-label="Select sport to download participants"
+        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Select Sport</option>
+        {% set all_sports = participants|map(attribute=3)|list + teams|map(attribute=2)|list %}
+        {% for sport in all_sports | unique %}
+          <option value="{{ sport }}">{{ sport }}</option>
+        {% endfor %}
+      </select>
+      
+      <!-- Combined Download by Sport Button -->
+      <div class="relative inline-block text-left">
+        <button
+          id="download-sport-toggle"
+          class="px-5 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-shadow shadow-sm hover:shadow-lg"
+          aria-label="Download participants by selected sport"
+        >
+          Download by Sport
+        </button>
+        <div id="download-sport-menu" class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-20">
+          <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="download-sport-toggle">
+            <a href="#" onclick="downloadBySport('participants')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+              Participants
+            </a>
+            <a href="#" onclick="downloadBySport('teams')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+              Teams
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Participants Table -->
+    <h2 class="text-2xl font-bold text-center text-blue-700 mb-6 mt-10">Individual Participants</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto border-collapse border border-gray-300 text-left text-sm md:text-base">
+        <thead class="bg-blue-600 text-white uppercase sticky top-0 z-10">
           <tr>
-            <th class="px-6 py-3">#</th>
-            <th class="px-6 py-3">Name</th>
-            <th class="px-6 py-3">Email</th>
-            <th class="px-6 py-3">Sport</th>
-            <th class="px-6 py-3">Mobile</th>
-            <th class="px-6 py-3">Role</th>
-            <th class="px-6 py-3">Course</th>
-            <th class="px-6 py-3">Action</th>
+            <th class="border border-gray-300 px-6 py-4">ID</th>
+            <th class="border border-gray-300 px-6 py-4">Name</th>
+            <th class="border border-gray-300 px-6 py-4">Email</th>
+            <th class="border border-gray-300 px-6 py-4">Sport</th>
+            <th class="border border-gray-300 px-6 py-4">Mobile</th>
+            <th class="border border-gray-300 px-6 py-4">Role</th>
+            <th class="border border-gray-300 px-6 py-4">Course</th>
+            <th class="border border-gray-300 px-6 py-4">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
-          {% for participant in participants %}
-          <tr class="hover:bg-gray-50 transition">
-            <td class="px-6 py-4 font-medium">{{ loop.index }}</td>
-            <td class="px-6 py-4">{{ participant[0] }}</td>
-            <td class="px-6 py-4">{{ participant[1] }}</td>
-            <td class="px-6 py-4">{{ participant[2] }}</td>
-            <td class="px-6 py-4">{{ participant[3] }}</td>
-            <td class="px-6 py-4">{{ participant[4] }}</td>
-            <td class="px-6 py-4">
-              {% if participant[4] == 'Student' %}
-                {{ participant[5] }}
-              {% else %}
-                -
-              {% endif %}
-            </td>
-            <td class="px-6 py-4 space-x-2">
-              <form action="{{ url_for('delete_participant', row_id=loop.index0) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this participant?');">
-                <button class="bg-red-500 text-white px-3 py-1 rounded text-xs">Delete</button>
+        <tbody>
+          {% for p in participants %}
+          <tr class="even:bg-gray-50 hover:bg-blue-50 transition-colors">
+            <td class="border border-gray-300 px-6 py-4">{{ p[0] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[1] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[2] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[3] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[4] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[5] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ p[6] }}</td>
+            <td class="border border-gray-300 px-6 py-4 flex gap-2">
+              <a
+                href="{{ url_for('edit_participant', row_id=p[0]) }}"
+                class="px-3 py-1 bg-yellow-400 text-gray-900 rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-sm hover:shadow-md"
+                aria-label="Edit participant {{ p[1] }}"
+              >
+                Edit
+              </a>
+              <form
+                method="post"
+                action="{{ url_for('delete_participant', row_id=p[0]) }}"
+                onsubmit="return confirm('Are you sure you want to delete this participant?');"
+                class="inline"
+              >
+                <button
+                  type="submit"
+                  class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow shadow-sm hover:shadow-md"
+                  aria-label="Delete participant {{ p[1] }}"
+                >
+                  Delete
+                </button>
               </form>
-              <a href="{{ url_for('edit_participant', row_id=loop.index0) }}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs">Edit</a>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="text-center text-sm text-gray-500 mt-10">
-      &copy; {{ current_year }} College Sports Event. All rights reserved.
+    {% if participants|length == 0 %}
+      <p class="text-center text-gray-500 italic mt-6">No individual participants found.</p>
+    {% endif %}
+
+    <!-- Team Registrations Table -->
+    <h2 class="text-2xl font-bold text-center text-blue-700 mb-6 mt-10">Team Registrations</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto border-collapse border border-gray-300 text-left text-sm md:text-base">
+        <thead class="bg-blue-600 text-white uppercase sticky top-0 z-10">
+          <tr>
+            <th class="border border-gray-300 px-6 py-4">ID</th>
+            <th class="border border-gray-300 px-6 py-4">Team Name</th>
+            <th class="border border-gray-300 px-6 py-4">Sport</th>
+            <th class="border border-gray-300 px-6 py-4">Leader</th>
+            <th class="border border-gray-300 px-6 py-4">Roll No</th>
+            <th class="border border-gray-300 px-6 py-4">Members</th>
+            <th class="border border-gray-300 px-6 py-4">Timestamp</th>
+            <th class="border border-gray-300 px-6 py-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for team in teams %}
+          <tr class="even:bg-gray-50 hover:bg-blue-50 transition-colors">
+            <td class="border border-gray-300 px-6 py-4">{{ team[0] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ team[1] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ team[2] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ team[3] }}</td>
+            <td class="border border-gray-300 px-6 py-4">{{ team[4] }}</td>
+            <td class="border border-gray-300 px-6 py-4">
+              <ul class="list-disc list-inside">
+                {% for member in team[5:9] %}
+                  {% if member %}<li>{{ member }}</li>{% endif %}
+                {% endfor %}
+              </ul>
+            </td>
+            <td class="border border-gray-300 px-6 py-4">{{ team[9].strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td class="border border-gray-300 px-6 py-4 flex gap-2">
+              <a
+                href="{{ url_for('edit_team', row_id=team[0]) }}"
+                class="px-3 py-1 bg-yellow-400 text-gray-900 rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-sm hover:shadow-md"
+                aria-label="Edit team {{ team[1] }}"
+              >
+                Edit
+              </a>
+              <form
+                method="post"
+                action="{{ url_for('delete_team', row_id=team[0]) }}"
+                onsubmit="return confirm('Are you sure you want to delete this team?');"
+                class="inline"
+              >
+                <button
+                  type="submit"
+                  class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-shadow shadow-sm hover:shadow-md"
+                  aria-label="Delete team {{ team[1] }}"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if teams|length == 0 %}
+      <p class="text-center text-gray-500 italic mt-6">No team registrations found.</p>
+    {% endif %}
+
+    <footer class="text-center text-gray-500 text-sm mt-8 select-none">
+      &copy; {{ current_year }} Sports Day Management
     </footer>
-
   </div>
+
+<script>
+  function downloadBySport(type) {
+    const sport = document.getElementById('sport-select').value;
+    if (!sport) {
+      alert('Please select a sport from the dropdown first.');
+      return;
+    }
+    if (type === 'participants') {
+      window.location.href = '/download_sport/' + encodeURIComponent(sport);
+    } else if (type === 'teams') {
+      window.location.href = '/download_team_sport/' + encodeURIComponent(sport);
+    }
+  }
+
+  // Toggle dropdown menu visibility
+  document.getElementById('download-all-toggle').addEventListener('click', function() {
+    const menu = document.getElementById('download-all-menu');
+    menu.classList.toggle('hidden');
+  });
+
+  document.getElementById('download-sport-toggle').addEventListener('click', function() {
+    const menu = document.getElementById('download-sport-menu');
+    menu.classList.toggle('hidden');
+  });
+
+  // Close dropdowns when clicking outside
+  window.addEventListener('click', function(e) {
+    if (!document.getElementById('download-all-toggle').contains(e.target) && !document.getElementById('download-all-menu').contains(e.target)) {
+      document.getElementById('download-all-menu').classList.add('hidden');
+    }
+    if (!document.getElementById('download-sport-toggle').contains(e.target) && !document.getElementById('download-sport-menu').contains(e.target)) {
+      document.getElementById('download-sport-menu').classList.add('hidden');
+    }
+  });
+
+</script>
 
 </body>
 </html>

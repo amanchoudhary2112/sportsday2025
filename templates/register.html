@@ -21,16 +21,14 @@
 <body class="bg-[#fefefe] text-gray-900">
 
   <!-- Header -->
-  <header class="bg-[#FF9933] py-4 shadow-md sticky top-0 z-50">
+  <header class="bg-[#0f3f8f] py-4 shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
-        <img src="{{ url_for('static', filename='NIELIT_Logo copy.jpeg') }}" alt="NIELIT Logo" class="h-10 object-contain bg-white rounded p-1">
+        <img src="{{ url_for('static', filename='images/NIELIT_Logo copy.png') }}" alt="NIELIT Logo" class="h-10 bg-white rounded p-1 shadow">
         <h1 class="text-2xl font-bold text-white">NIELIT Sports Day 2025</h1>
       </div>
       <nav class="space-x-6 text-white font-medium text-lg">
         <a href="/" class="hover:underline">Home</a>
-        <!-- <a href="/register" class="hover:underline font-semibold">Register</a> -->
-        <!-- <a href="/participants" class="hover:underline">Participants</a> -->
       </nav>
     </div>
   </header>
@@ -40,96 +38,103 @@
 
   <!-- Hero Section -->
   <section class="text-center py-10 px-4">
-    <h2 class="text-4xl font-bold text-blue-900 mb-2">Register for Sports Day 2025</h2>
+    <h2 class="text-4xl font-extrabold text-blue-900 mb-2">Register for Sports Day 2025</h2>
     <div class="tricolor-underline mb-4"></div>
-    <p class="text-gray-600 italic mb-10">“It’s not about being the best, it’s about being better than you were yesterday.”</p>
-    
-    <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-lg p-8 border border-gray-200">
+    <p class="text-gray-600 italic mb-10">“Champions keep playing until they get it right.” – Billie Jean King</p>
+
+    <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-xl p-8 border border-gray-200">
       <form method="POST" class="space-y-6">
 
-  <!-- Full Name -->
-  <div>
-    <label for="name" class="block mb-1 font-medium">Full Name</label>
-    <input type="text" id="name" name="name" required
-           class="w-full border-2 border-orange-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-  </div>
+        <!-- Full Name -->
+        <div>
+          <label for="name" class="block mb-1 font-semibold">Full Name</label>
+          <input type="text" id="name" name="name" required
+                class="w-full border-2 border-orange-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
 
-  <!-- Role Selection -->
-  <div>
-    <label for="role" class="block mb-1 font-medium">You are a:</label>
-    <select id="role" name="role" required
-            onchange="toggleCourseDropdown()"
-            class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">-- Select your role --</option>
-      <option value="Student">Student</option>
-      <option value="Faculty">Faculty</option>
-    </select>
-  </div>
+        <!-- Role -->
+        <div>
+          <label for="role" class="block mb-1 font-semibold">You are a:</label>
+          <select id="role" name="role" required onchange="toggleCourseDropdown()"
+                  class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Select your role --</option>
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty</option>
+          </select>
+        </div>
 
-  <!-- Course Selection (Only for Students) -->
-  <div id="courseSection" class="hidden">
-    <label for="course" class="block mb-1 font-medium">Select Course</label>
-    <select id="course" name="course"
-            class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">-- Select your course --</option>
-      <option value="BCA">BCA Sem-5</option>
-      <option value="BSC">BSC Sem-5</option>
-      <option value="BTECH">BTECH Sem-3</option>
-      <option value="MTECH">MTECH Sem-3</option>
-    </select>
-  </div>
+        <!-- Course (Student Only) -->
+        <div id="courseSection" class="hidden">
+          <label for="course" class="block mb-1 font-semibold">Select Course</label>
+          <select id="course" name="course"
+                  class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Select your course --</option>
+            <option value="BCA">BCA Sem-5</option>
+            <option value="BSC">BSC Sem-5</option>
+            <option value="BTECH">BTECH Sem-3</option>
+            <option value="MTECH">MTECH Sem-3</option>
+          </select>
+        </div>
 
-  <!-- Mobile Number -->
-  <div>
-    <label for="mobile" class="block mb-1 font-medium">Mobile Number</label>
-    <input type="number" id="mobile" name="mobile" required
-           class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-  </div>
+        <!-- Mobile -->
+        <div>
+          <label for="mobile" class="block mb-1 font-semibold">Mobile Number</label>
+          <input type="number" id="mobile" name="mobile" required
+                 class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
 
-  <!-- Email Address -->
-  <div>
-    <label for="email" class="block mb-1 font-medium">Email Address</label>
-    <input type="email" id="email" name="email" required
-           class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-  </div>
+        <!-- Email -->
+        <div>
+          <label for="email" class="block mb-1 font-semibold">Email Address</label>
+          <input type="email" id="email" name="email" required
+                 class="w-full border-2 border-blue-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
 
-  <!-- Sport -->
-  <div>
-    <label for="sport" class="block mb-1 font-medium">Select Sport</label>
-    <select id="sport" name="sport" required
-            class="w-full border-2 border-green-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-      <option value="">-- Choose an event --</option>
-      <option value="Badminton">Badminton</option>
-      <option value="Carrom Board">Carrom Board</option>
-      <option value="Chess">Chess</option>
-      <option value="Table Tennis">Table Tennis</option>
-      <option value="Tug Of War">Tug Of War</option>
-      <option value="Lemon Spoon Race">Lemon Spoon Race</option>
-    </select>
-  </div>
+        <!-- Sport -->
+        <div>
+          <label for="sport" class="block mb-1 font-semibold">Select Sport</label>
+          <select id="sport" name="sport" required
+                  class="w-full border-2 border-green-400 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+            <option value="">-- Choose an event --</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Carrom Board">Carrom Board</option>
+            <option value="Chess">Chess</option>
+            <option value="Table Tennis">Table Tennis</option>
+            <option value="Tug Of War">Tug Of War</option>
+            <option value="Lemon Spoon Race">Lemon Spoon Race</option>
+          </select>
+        </div>
+        
+        <!-- Submit -->
+        <div class="text-center">
+          <button type="submit"
+                  class="bg-gradient-to-r from-orange-400 via-white to-green-600 text-black px-6 py-3 rounded-full font-semibold hover:scale-105 transition transform shadow-md">
+             Submit Registration
+          </button>
+        </div>
 
-  <!-- Submit Button -->
-  <div class="text-center">
-    <button type="submit"
-            class="bg-gradient-to-r from-orange-400 via-white to-green-600 text-black px-6 py-3 rounded-full font-semibold hover:scale-105 transition transform shadow-md">
-      Submit Registration
-    </button>
-  </div>
-</form>
-
+      </form>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="bg-[#138808] text-white py-4 mt-16">
-    <div class="text-center text-sm">© 2025 NIELIT Sports Day Committee. 🇮🇳 Jai Hind</div>
+    <div class="text-center text-sm font-medium">© 2025 NIELIT Sports Day Committee.</div>
   </footer>
 
-  <script>
+  <!-- JS for course toggle -->
+ <script>
   function toggleCourseDropdown() {
     const role = document.getElementById('role').value;
     const courseSection = document.getElementById('courseSection');
-    courseSection.classList.toggle('hidden', role !== 'Student');
+    const courseSelect = document.getElementById('course');
+
+    if (role === 'Student') {
+      courseSection.classList.remove('hidden');
+    } else {
+      courseSelect.value = ''; // Clear any selected course
+      courseSection.classList.add('hidden');
+    }
   }
 </script>
 

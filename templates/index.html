@@ -9,15 +9,31 @@
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css"  rel="stylesheet">
   <style>
     .hero-bg {
-      background-image: url("static/images/banner5 copy.png");
-      background-size: cover;
-      background-position: center;
-      min-height: 450px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
+  background-image: url("static/images/b1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Responsive Fix for Mobile */
+@media (max-width: 768px) {
+  .hero-bg {
+    height: auto;
+    min-height: 300px;
+    background-size: contain; /* or '100% auto' */
+    background-repeat: no-repeat;
+    background-position: top center;
+    padding-top: 20px;
+  }
+}
+
 
     /* .tricolor-overlay {
       background: linear-gradient(
@@ -84,6 +100,82 @@
       border-bottom: 4px solid #138808;
     }
   </style>
+  <!-- <style>
+  .hero-bg {
+    background-image: url("static/images/new_banner.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .hero-bg {
+      height: auto;
+      min-height: 250px;
+      background-size: contain;
+      background-position: top center;
+      padding: 20px 0;
+    }
+  }
+
+  .chakra-btn {
+    background-color: #0f3f8f;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+  }
+
+  .chakra-btn:hover {
+    background-color: #1251b5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .floating-register {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    background-color: #0f3f8f;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: bounce 2s infinite;
+    display: none;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (max-width: 768px) {
+    .floating-register {
+      display: block;
+    }
+  }
+
+  .saffron-strip {
+    background-color: #ff6600;
+    height: 6px;
+  }
+
+  .green-border {
+    border-bottom: 4px solid #138808;
+  }
+</style> -->
+
 </head>
 <body class="bg-white text-gray-800">
 
@@ -94,7 +186,7 @@
   <header class="bg-white text-[#0f3f8f] py-4 shadow-md sticky top-0 z-50 green-border">
     <div class="container mx-auto px-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
-        <img src="https://upload.wikimedia.org/wikipedia/en/b/b4/NIELIT_Logo.jpg"  alt="Institute Logo" class="h-10 object-contain">
+        <img src="{{ url_for('static', filename='images/NIELIT_Logo copy.png') }}" alt="Institute Logo" class="h-14 object-contain bg-white rounded p-1 shadow">
         <h1 class="text-l md:text-l font-bold">Sports Day 2025</h1>
       </div>
       <nav class="space-x-4 md:space-x-6 text-sm md:text-base">
@@ -120,7 +212,6 @@
   </a>
 </div>
 
-
   <!-- Countdown Timer -->
   <section class="text-center pt-6 pb-10" data-aos="fade-up">
     <h3 class="text-2xl font-bold text-[#0f3f8f] mb-4">⏳ Countdown to the Big Day</h3>
@@ -145,11 +236,11 @@
   <!-- Fun Facts -->
   <section class="bg-[#f7f7f7] py-12 px-6" data-aos="fade-up">
     <div class="max-w-4xl mx-auto text-center">
-      <h3 class="text-2xl font-bold text-[#ff6600] mb-6">🇮🇳 Did You Know?</h3>
+      <h3 class="text-2xl font-bold text-[#ff6600] mb-6"> Did You Know ?</h3>
       <ul class="space-y-4 text-lg text-gray-700">
         <li>National Sports Day is celebrated on August 29, the birth anniversary of Major Dhyan Chand.</li>
-        <li>🏑 Major Dhyan Chand was known as the "Wizard of Hockey".</li>
-        <li>🎖️ India has won 8 Olympic gold medals in field hockey, the highest by any team.</li>
+        <li>Major Dhyan Chand was known as the "Wizard of Hockey".</li>
+        <li>India has won 8 Olympic gold medals in field hockey, the highest by any team.</li>
       </ul>
     </div>
   </section>
@@ -168,7 +259,7 @@
 
   <!-- Footer -->
   <footer class="bg-[#0f3f8f] text-white py-4 mt-16 border-t-4 border-[#ff6600]" data-aos="fade-up">
-    <div class="text-center text-sm">&copy; 2025 Sports Day Committee. Jai Hind 🇮🇳</div>
+    <div class="text-center text-sm">&copy; 2025 NIELIT Sports Day Committee.</div>
   </footer>
 
   <!-- Floating Register Button (Mobile Only) -->

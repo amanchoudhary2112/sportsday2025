@@ -1,58 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registration Successful</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Successful - Sports Day 2025</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+  <!-- Confetti JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .tri-color-border {
+      border-top: 5px solid #ff9933;
+      border-bottom: 5px solid #138808;
+    }
+
+    .hover-tricolor:hover {
+      background: linear-gradient(to right, #ff9933, #ffffff, #138808);
+      color: #0f3f8f !important;
+    }
+
+    .flag-wave {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_India.svg/2560px-Flag_of_India.svg.png') no-repeat center;
+      background-size: cover;
+      opacity: 0.05;
+      z-index: 0;
+      animation: wave 10s linear infinite alternate;
+    }
+
+    @keyframes wave {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(15px); }
+    }
+
+    .celebrate-border {
+      box-shadow: 0 0 10px rgba(19, 136, 8, 0.4), 0 0 20px rgba(255, 153, 51, 0.3);
+    }
+  </style>
 </head>
-<body class="bg-green-50 text-gray-800">
+<body class="min-h-screen flex flex-col text-[#0f3f8f] relative overflow-hidden">
+
+  <!-- Decorative Flag Background -->
+  <!-- <div class="flag-wave"></div> -->
+
   <!-- Header -->
-  <header class="bg-blue-800 text-white py-5 shadow-md sticky top-0 z-50">
-    <div class="container mx-auto px-4 flex justify-between items-center">
+  <header class="bg-white text-[#0f3f8f] tri-color-border shadow-md sticky top-0 z-50 w-full celebrate-border">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
-        <img src="/static/logo.png" alt="Institute Logo" class="h-10 w-10 object-contain">
-        <h1 class="text-2xl font-bold">Sports Day 2025</h1>
+        <img src="{{ url_for('static', filename='images/NIELIT_Logo copy.png') }}" alt="NIELIT Logo" class="h-10" onerror="this.style.display='none'">
+        <h1 class="text-2xl md:text-3xl font-bold">Sports Day 2025</h1>
       </div>
-      <nav class="space-x-6 text-lg">
-        <a href="/" class="hover:underline">Home</a>
-        <a href="/participants" class="hover:underline">Participants</a>
+      <nav class="space-x-4 text-sm md:text-base">
+        <a href="/" style="color: #0F3F8FFF;" class="hover:text-[#ff9933] transition">Home</a>
+        <a href="/register" style="color: #0F3F8FFF;"class="hover:text-[#138808] transition">Register</a>
+        <a href="/gallery" style="color: #0F3F8FFF;"class="hover:text-[#0F3F8FFF] transition">Gallery</a>
       </nav>
     </div>
   </header>
 
-  <!-- Success Message -->
-  <section class="py-20 px-6 text-center">
-    <div class="max-w-xl mx-auto bg-white p-10 rounded-lg shadow-md animate-fade-in-up">
-      <lottie-player src="https://lottie.host/6f5a18df-4b13-489f-a7ff-f52a1a6e1592/1HCGiWly9A.json" background="transparent" speed="1" style="width: 140px; height: 140px; margin: 0 auto 1rem auto;" loop autoplay></lottie-player>
-      <audio id="celebration-sound" autoplay>
-        <source src="/static/sounds/celebration.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-      <h2 class="text-3xl font-bold text-green-700 mb-4">Registration Successful!</h2>
-      <p class="text-lg mb-4">Thank you <strong>{{ name }}</strong> for registering for <strong>{{ sport }}</strong>.</p>
-      <p class="text-base mb-6">We’re excited to see you compete in the Sports Day 2025 event!</p>
-      <div class="space-x-4">
-        <a href="/" class="inline-block bg-blue-700 text-white px-5 py-2 rounded hover:bg-blue-800 transition">Back to Home</a>
-        <a href="/participants" class="inline-block bg-gray-300 text-gray-800 px-5 py-2 rounded hover:bg-gray-400 transition">View Participants</a>
-      </div>
-    </div>
-  </section>
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center text-center px-4 py-16 z-10 relative">
+    <h2 class="text-5xl md:text-6xl font-extrabold mb-6 text-green-600 animate-pulse">Registration Successful!</h2>
+    <p class="text-xl md:text-2xl mb-3">Thank you <strong>{{ name }}</strong> for registering for <strong>{{ sport }}</strong>.</p>
+    <p class="mb-8 text-lg md:text-xl text-[#0f3f8f]">We look forward to seeing you on <strong>National Sports Day 2025</strong></p>
+    
+    <a href="/" class="mt-4 px-10 py-4 bg-white text-[#0f3f8f] font-semibold border-2 border-[#0f3f8f] rounded-full hover-tricolor transition-all duration-300 shadow-lg text-lg md:text-xl">
+      Back to Home
+    </a>
+  </main>
 
-  <style>
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up {
-      animation: fadeInUp 0.7s ease-out;
-    }
-  </style>
+  <!-- Celebration Sound -->
+  <audio id="successSound" preload="auto">
+    <source src="{{ url_for('static', filename='sounds/celebration.mp3') }}" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-  <!-- Footer -->
-  <footer class="bg-blue-800 text-white py-6 mt-16">
-    <div class="text-center text-sm">&copy; 2025 Sports Day Committee. All rights reserved.</div>
-  </footer>
+  <!-- Confetti Script -->
+  <script>
+    window.addEventListener('load', () => {
+      const sound = document.getElementById("successSound");
+      if (sound) {
+        sound.play().catch(e => {
+          console.warn("Autoplay blocked:", e);
+        });
+      }
+
+      const defaults = {
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        zIndex: 9999
+      };
+
+      setInterval(() => {
+        confetti(Object.assign({}, defaults, {
+          particleCount: 60,
+          origin: {
+            x: Math.random(),
+            y: Math.random() * 0.6
+          }
+        }));
+      }, 500);
+    });
+  </script>
 </body>
 </html>
